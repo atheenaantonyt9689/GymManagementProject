@@ -1,9 +1,9 @@
 {% extends 'adminlte/base.html' %}
-{% block title %}Trainer List{% endblock %}
+{% block title %}GYM List{% endblock %}
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Trainer List</h3>
+            <h3 class="card-title">GymList</h3>
 
             <div class="card-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -22,24 +22,25 @@
             <table class="table table-hover text-nowrap">
                 <thead>
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>User Name</th>
+                    <th>Name</th>
                     <th>Email</th>
+                    <th>Website</th>
+                    <th>Phone</th>
 
 
                 </tr>
                 </thead>
                 <tbody>
-                {% for user in administrators %}
+                {% for gym in gym_information %}
                 <tr>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
+                    <td>{{ gym.name}}</td>
+                    <td>{{ gym.email }}</td>
+                    <td>{{ gym.website }}</td>
+                    <td>{{gym.phone }}</td>
 
-                    <td><a href="{% url 'fithub_trainer_update' user.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
-                    <td><a href="{%  url 'fithub_trainer_delete' user.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+                    <td><a href="{% url 'fithub_admin_create' %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Add Admin</a></td>
+                    <td><a href="{% url 'superadmin_gym_update' gym.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
+                    <td><a href="{%  url 'superadmin_gym_delete' gym.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
                 </tr>
                 {% endfor %}
 
