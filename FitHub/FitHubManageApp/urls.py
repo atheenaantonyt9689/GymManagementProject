@@ -2,7 +2,9 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     AdministratorDeleteView, \
     AdministratorListView, TrainerCreateView, TrainerDeleteView, TrainerListView, \
     LogoutView, UserLogin, ChangePasswordView, TrainerDashBoardView, AdminDashBoardView, GymInformationCreateView, \
-    GymInformationUpdateView, GymInfoDeleteView, GymInformationListView, TrainerUpdateView
+    GymInformationUpdateView, GymInfoDeleteView, GymInformationListView, TrainerUpdateView, AdminVideoListView, \
+    AdminVideoCreateView, AdminVideoUpdateView, AdminVideoDeleteView, AdminBlogCreateView, AdminBlogUpdateView, \
+    AdminBlogListView, AdminBlogDeleteView
 
 from django.urls import path
 
@@ -27,6 +29,21 @@ urlpatterns = [
     path('user/trainer/delete/<int:pk>', TrainerDeleteView.as_view(), name='fithub_trainer_delete'),
     path('user/trainer/list/', TrainerListView.as_view(), name='fithub_trainer_list'),
     path('user/trainer/dashboard', TrainerDashBoardView.as_view(), name='fithub_trainer_dashboard'),
+
+    # Admin Video Management
+    path('user/admin/video/create/', AdminVideoCreateView.as_view(), name='fithub_admin_video_create'),
+    path('user/admin/video/update/<int:pk>', AdminVideoUpdateView.as_view(), name='fithub_admin_video_update'),
+    path('user/admin/video/delete/<int:pk>', AdminVideoDeleteView.as_view(), name='fithub_admin_video_delete'),
+    path('user/admin/video/list/', AdminVideoListView.as_view(), name='fithub_admin_video_list'),
+
+    # Admin Blog Management
+    path('user/admin/blog/create/', AdminBlogCreateView.as_view(), name='fithub_admin_blog_create'),
+    path('user/admin/blog/update/<int:pk>', AdminBlogUpdateView.as_view(), name='fithub_admin_blog_update'),
+    path('user/admin/blog/delete/<int:pk>', AdminBlogDeleteView.as_view(), name='fithub_admin_blog_delete'),
+    path('user/admin/blog/list/', AdminBlogListView.as_view(), name='fithub_admin_blog_list'),
+
+
+
 
     # Login Section
     path('', UserLogin.as_view(), name='fithub_login_view'),

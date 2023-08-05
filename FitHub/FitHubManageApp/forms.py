@@ -1,10 +1,11 @@
 from django import forms
+from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-from FitHubManageApp.models import GymInformation, GymTrainer
+from FitHubManageApp.models import GymInformation, GymTrainer, AdminVideoGallery, Blog
 
 
 class AdminstratorCreateForm(forms.ModelForm):
@@ -76,7 +77,6 @@ class TrainerCreateForm(forms.ModelForm):
         self.fields['confirm_password'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['confirm_password'].widget.attrs['class'] = 'form-control'
 
-
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password', 'confirm_password']
@@ -94,7 +94,6 @@ class TrainerCreateForm(forms.ModelForm):
         if user:
             raise ValidationError('User with the given email already exists')
         return self.data['email']
-
 
 
 class TrainerUpdateForm(forms.ModelForm):
@@ -116,13 +115,11 @@ class TrainerUpdateForm(forms.ModelForm):
         self.fields['confirm_password'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['confirm_password'].widget.attrs['class'] = 'form-control'
 
-
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'password', 'confirm_password']
 
     def clean_password(self):
-
         if self.data['password'] != self.data['confirm_password']:
             raise ValidationError('Password and Confirmation Password mismatch!')
         validate_password(self.data['password'])
@@ -203,3 +200,68 @@ class GymInformationCreateForm(forms.ModelForm):
         model = GymInformation
         fields = ['name', 'address', 'phone', 'email', 'website', 'facebook', 'twitter', 'instagram', 'youtube', 'logo',
                   'about_us']
+
+
+class AdminVideoCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['thumbnail'].widget.attrs['class'] = "company-icon-filepond"
+        self.fields['name'].widget.attrs['placeholder'] = 'Gym Name'
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        # It should be from youtube iframe section
+        self.fields['url'].widget.attrs['placeholder'] = 'Youtube URL'
+        self.fields['url'].widget.attrs['class'] = 'form-control'
+        self.fields['sort_order'].widget.attrs['placeholder'] = 'Sort Order'
+        self.fields['sort_order'].widget.attrs['class'] = 'form-control'
+        self.fields['is_admin'].widget.attrs['class'] = 'is-switch'
+
+    class Meta:
+        model = AdminVideoGallery
+        fields = ['name', 'url', 'sort_order', 'is_admin']
+
+    def clean(self):
+        admin_video = AdminVideoGallery.objects.filter(url__iexact=self.cleaned_data['url']).first()
+        if admin_video:
+            raise ValidationError('Video with the same url already exists!')
+        return super().clean()
+
+
+class AdminVideoEditForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['thumbnail'].widget.attrs['class'] = "company-icon-filepond"
+        self.fields['name'].widget.attrs['placeholder'] = 'Gym Name'
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        # It should be from youtube iframe section
+        self.fields['url'].widget.attrs['placeholder'] = 'Youtube URL'
+        self.fields['url'].widget.attrs['class'] = 'form-control'
+        self.fields['sort_order'].widget.attrs['placeholder'] = 'Sort Order'
+        self.fields['sort_order'].widget.attrs['class'] = 'form-control'
+        self.fields['is_admin'].widget.attrs['class'] = 'is-switch'
+
+    class Meta:
+        model = AdminVideoGallery
+        fields = ['name', 'url', 'sort_order', 'is_admin']
+
+    def clean(self):
+        admin_video = AdminVideoGallery.objects.filter(url__iexact=self.cleaned_data['url']).first()
+        if admin_video:
+            if admin_video != self.instance:
+                raise ValidationError('Video with the same url already exists!')
+        return super().clean()
+
+
+class AdminBlogCreateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs['placeholder'] = 'Blog Title'
+        self.fields['title'].widget.attrs['class'] = 'form-control'
+        # add image field file upload
+        # self.fields['image'].widget.attrs['placeholder'] = 'Blog Image'
+        # self.fields['image'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['placeholder'] = 'Blog Description'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Blog
+        fields = ['title', 'description', 'image']

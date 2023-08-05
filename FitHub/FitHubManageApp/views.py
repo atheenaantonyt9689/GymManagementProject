@@ -8,8 +8,8 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView, FormView
 
 from FitHubManageApp.forms import AdminstratorCreateForm, TrainerCreateForm, LoginForm, ChangePasswordForm, \
-    GymInformationCreateForm, TrainerUpdateForm
-from FitHubManageApp.models import GymInformation, GymAdministator, GymTrainer, GymMember
+    GymInformationCreateForm, TrainerUpdateForm, AdminVideoCreateForm, AdminVideoEditForm, AdminBlogCreateForm
+from FitHubManageApp.models import GymInformation, GymAdministator, GymTrainer, GymMember, AdminVideoGallery, Blog
 
 
 # Create your views here.
@@ -220,17 +220,19 @@ class TrainerUpdateView(LoginRequiredMixin, FormView):
         context["trainer_management_tree"] = "menu-open"
         context["trainers_list"] = "active"
         return context
+
     def get_initial(self):
         initial = super().get_initial()
         print("self.kwargs['pk'] ", self.kwargs['pk'])
         trainer_obj = GymTrainer.objects.filter(id=self.kwargs['pk']).first()
-        print(trainer_obj,"trainer_obj")
+        print(trainer_obj, "trainer_obj")
         initial['first_name'] = trainer_obj.user.first_name
         initial['last_name'] = trainer_obj.user.last_name
         initial['email'] = trainer_obj.user.email
         # initial['password'] = trainer_obj.user.password
         # Todo Need to Handle password update
         return initial
+
     def form_valid(self, form):
         form.save()
         print("form is valid")
@@ -413,4 +415,156 @@ class GymInformationListView(LoginRequiredMixin, ListView):
         context['gym_information'] = GymInformation.objects.all()
         context["gym_information_list"] = "active"
         context["gym_management_tree"] = "menu-open"
+        return context
+
+
+class AdminVideoCreateView(LoginRequiredMixin, CreateView):
+    template_name = 'FitHubManageApp/video_management/admin_video_add.html'
+    model = AdminVideoGallery
+    form_class = AdminVideoCreateForm
+    success_url = reverse_lazy('fithub_admin_video_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["video_add"] = "active"
+        context["video_management_tree"] = "menu-open"
+
+        return context
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+
+        messages.success(self.request, 'Admin Video added successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.cleaned_data)
+        return super().form_invalid(form)
+
+
+class AdminVideoUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = 'FitHubManageApp/video_management/admin_video_edit.html'
+    model = AdminVideoGallery
+    form_class = AdminVideoEditForm
+    success_url = reverse_lazy('fithub_admin_video_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["video_list"] = "active"
+        context["video_management_tree"] = "menu-open"
+        return context
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        messages.success(self.request, 'Admin Video updated successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        messages.error(self.request, 'url already exists')
+        return super().form_invalid(form)
+
+
+class AdminVideoListView(LoginRequiredMixin, TemplateView):
+    template_name = 'FitHubManageApp/video_management/admin_video_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["video_list"] = "active"
+        context["video_management_tree"] = "menu-open"
+        context["admin_video_list"] = AdminVideoGallery.objects.all()
+        return context
+
+
+class AdminVideoDeleteView(LoginRequiredMixin, DeleteView):
+    model = AdminVideoGallery
+    template_name = 'FitHubManageApp/video_management/admin_video_delete.html'
+
+    def get_success_url(self):
+        return reverse('fithub_admin_video_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["video_list"] = "active"
+        context["video_management_tree"] = "menu-open"
+        return context
+
+
+class AdminBlogCreateView(LoginRequiredMixin, FormView):
+    template_name = 'FitHubManageApp/Blog/admin_blog_add.html'
+    model = Blog
+    form_class = AdminBlogCreateForm
+    success_url = reverse_lazy('fithub_admin_video_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog_add"] = "active"
+        context["blog_management_tree"] = "menu-open"
+
+        return context
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        titile = form.cleaned_data['title']
+        description = form.cleaned_data['description']
+        image = form.cleaned_data['image']
+        user = self.request.user
+        admin_obj = GymAdministator.objects.filter(user=user).first()
+
+        if admin_obj is not None:
+            blog_obj = Blog.objects.create(title=titile, description=description, image=image, admin=admin_obj)
+            blog_obj.save()
+            messages.success(self.request, 'Admin Blog Posted successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        return super().form_invalid(form)
+
+
+class AdminBlogUpdateView(LoginRequiredMixin, UpdateView):
+    model = Blog
+    form_class = AdminBlogCreateForm
+    template_name = 'FitHubManageApp/Blog/admin_blog_edit.html'
+    success_url = reverse_lazy('fithub_admin_blog_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog_list"] = "active"
+        context["blog_management_tree"] = "menu-open"
+        return context
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        messages.success(self.request, 'Admin Blog updated successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        return super().form_invalid(form)
+
+
+class AdminBlogListView(LoginRequiredMixin, ListView):
+    model = Blog
+    template_name = 'FitHubManageApp/Blog/admin_blog_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog_list"] = "active"
+        context["blog_management_tree"] = "menu-open"
+        context["admin_blog_list"] = Blog.objects.all()
+        return context
+
+
+class AdminBlogDeleteView(LoginRequiredMixin, DeleteView):
+    model = Blog
+    template_name = 'FitHubManageApp/Blog/admin_blog_delete.html'
+    success_url = reverse_lazy('fithub_admin_blog_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog_list"] = "active"
+        context["blog_management_tree"] = "menu-open"
         return context
