@@ -1,8 +1,8 @@
 from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateView, AdministratorUpdateView, \
     AdministratorDeleteView, \
-    AdministratorListView, TrainerCreateView, TrainerUpdateView, TrainerDeleteView, TrainerListView, \
+    AdministratorListView, TrainerCreateView, TrainerDeleteView, TrainerListView, \
     LogoutView, UserLogin, ChangePasswordView, TrainerDashBoardView, AdminDashBoardView, GymInformationCreateView, \
-    GymInformationUpdateView, GymInfoDeleteView, GymInformationListView
+    GymInformationUpdateView, GymInfoDeleteView, GymInformationListView, TrainerUpdateView
 
 from django.urls import path
 
@@ -15,10 +15,10 @@ urlpatterns = [
     path('superadmin/gyminfo/list/', GymInformationListView.as_view(), name='superadmin_gym_list'),
 
     # Admin Section
-    path('user/admin/create/', AdministratorCreateView.as_view(), name='fithub_admin_create'),
+    path('user/admin/create/<int:gym_id>', AdministratorCreateView.as_view(), name='fithub_admin_create'),
     path('user/admin/update/<int:pk>', AdministratorUpdateView.as_view(), name='fithub_admin_update'),
     path('user/admin/delete/<int:pk>', AdministratorDeleteView.as_view(), name='fithub_admin_delete'),
-    path('user/admin/list/', AdministratorListView.as_view(), name='fithub_admin_list'),
+    path('user/admin/list/<int:gym_id>', AdministratorListView.as_view(), name='fithub_admin_list'),
     path('user/admin/dashboard', AdminDashBoardView.as_view(), name='fithub_admin_dashboard'),
 
     # Trainer Section

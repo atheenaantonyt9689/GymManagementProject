@@ -53,8 +53,6 @@ class GymInformation(models.Model):
     logo = models.ImageField(upload_to='gym_information/', null=True, blank=True,
                              default='gym_information/logo.png')
     about_us = models.TextField(blank=True, null=True)
-    administators = models.ManyToManyField(User, related_name='administrators', null=True, blank=True)
-    trainers = models.ManyToManyField(User, related_name='trainers', null=True, blank=True)
     members = models.ManyToManyField(User, related_name='gym_members', null=True, blank=True)
 
     def __str__(self):
@@ -71,7 +69,26 @@ class AdminGymGallery(models.Model):
         return "{}".format(self.name)
 
 
+class GymMember(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    gym_info = models.ForeignKey('GymInformation', on_delete=models.CASCADE)
+    is_admin = models.BooleanField(default=False)
+    is_trainer = models.BooleanField(default=False)
+    is_normal_member = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username}"
+
+
 class GymAdministator(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    gym_info = models.ForeignKey('GymInformation', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.username}"
+
+
+class GymTrainer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gym_info = models.ForeignKey('GymInformation', on_delete=models.CASCADE)
 

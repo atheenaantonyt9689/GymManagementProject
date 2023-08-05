@@ -38,7 +38,7 @@
                     <td>{{ gym.website }}</td>
                     <td>{{gym.phone }}</td>
 
-                    <td><a href="{% url 'fithub_admin_create' %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Add Admin</a></td>
+                    <td><a href="{% url 'fithub_admin_list' gym.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Manage Admin</a></td>
                     <td><a href="{% url 'superadmin_gym_update' gym.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
                     <td><a href="{%  url 'superadmin_gym_delete' gym.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
                 </tr>

@@ -6,15 +6,15 @@
             <h3 class="card-title">Administrators List</h3>
 
             <div class="card-tools">
-                <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                <a href="{% url 'fithub_admin_create' gym_id %}" ><button  class="btn btn-primary">Add Admin
+
+                </button></a>
+                {% comment %}<div class="input-group input-group-sm" style="width: 150px;">
 
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                        </button>
+
                     </div>
-                </div>
+                </div>{% endcomment %}
             </div>
         </div>
         <!-- /.card-header -->
@@ -22,24 +22,17 @@
             <table class="table table-hover text-nowrap">
                 <thead>
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>User Name</th>
-                    <th>Email</th>
-
+                    <th>UserName</th>
+                    <th>Gym</th>
 
                 </tr>
                 </thead>
                 <tbody>
-                {% for user in administrators %}
+                {% for gym_admin in gym_administrators %}
                 <tr>
-                    <td>{{ user.first_name }}</td>
-                    <td>{{ user.last_name }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.email }}</td>
-
-                    <td><a href="{% url 'fithub_admin_update' user.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
-                    <td><a href="{%  url 'fithub_admin_delete' user.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+                    <td>{{ gym_admin.user.username }}</td>
+                    <td>{{ gym_admin.gym_info.name }}</td>
+                    <td><a href="{%  url 'fithub_admin_delete' gym_admin.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
                 </tr>
                 {% endfor %}
 
