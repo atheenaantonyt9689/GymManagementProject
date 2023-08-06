@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView, FormView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView, FormView, DetailView
 
 from FitHubManageApp.forms import AdminstratorCreateForm, TrainerCreateForm, LoginForm, ChangePasswordForm, \
     GymInformationCreateForm, TrainerUpdateForm, AdminVideoCreateForm, AdminVideoEditForm, AdminBlogCreateForm
@@ -496,7 +496,7 @@ class AdminBlogCreateView(LoginRequiredMixin, FormView):
     template_name = 'FitHubManageApp/Blog/admin_blog_add.html'
     model = Blog
     form_class = AdminBlogCreateForm
-    success_url = reverse_lazy('fithub_admin_video_list')
+    success_url = reverse_lazy('fithub_admin_blog_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -568,3 +568,16 @@ class AdminBlogDeleteView(LoginRequiredMixin, DeleteView):
         context["blog_list"] = "active"
         context["blog_management_tree"] = "menu-open"
         return context
+
+
+class AdminBlogDetailView(LoginRequiredMixin, DetailView):
+    model = Blog
+    template_name = 'FitHubManageApp/Blog/blog_details.html'
+    success_url = reverse_lazy('fithub_admin_blog_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["blog_list"] = "active"
+        context["blog_management_tree"] = "menu-open"
+        return context
+

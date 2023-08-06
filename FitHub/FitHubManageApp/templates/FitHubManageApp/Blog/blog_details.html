@@ -1,0 +1,61 @@
+{% extends 'adminlte/base.html' %}
+{% block content %}
+    <div class="row text-center">
+    <div class="col-md-12">
+
+        <div class="card card-widget">
+            <div class="card-header">
+                <div class="user-block">
+                    <img class="img-circle" src="https://www.seekpng.com/png/detail/966-9665317_placeholder-image-person-jpg.png" alt="User Image">
+                    <span class="username"><a href="#">{{ object.admin }}</a></span>
+                    <span class="description">Shared publicly - {{ object.blog_date}}</span>
+
+                </div>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" title="Mark as read">
+                        <i class="far fa-circle"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <img class="img-fluid pad text-center" src="{{ object.image.url }}" alt="Photo" height="60%" width="60%">
+
+            </div>
+
+            <div class="card-footer card-comments">
+                <div class="card-comment">
+
+                    {% comment %}<img class="img-circle img-sm" src="../dist/img/user3-128x128.jpg" alt="User Image">{% endcomment %}
+                    <div class="comment-text">
+                        <span class="username">
+                       {{ object.title }}
+                       {% comment %} <span class="text-muted float-right">8:03 PM Today</span>{% endcomment %}
+                        </span>
+                        {{ object.description }}
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+            <div class="card-footer">
+
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,7 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     LogoutView, UserLogin, ChangePasswordView, TrainerDashBoardView, AdminDashBoardView, GymInformationCreateView, \
     GymInformationUpdateView, GymInfoDeleteView, GymInformationListView, TrainerUpdateView, AdminVideoListView, \
     AdminVideoCreateView, AdminVideoUpdateView, AdminVideoDeleteView, AdminBlogCreateView, AdminBlogUpdateView, \
-    AdminBlogListView, AdminBlogDeleteView
+    AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView
 
 from django.urls import path
 
@@ -40,6 +40,7 @@ urlpatterns = [
     path('user/admin/blog/create/', AdminBlogCreateView.as_view(), name='fithub_admin_blog_create'),
     path('user/admin/blog/update/<int:pk>', AdminBlogUpdateView.as_view(), name='fithub_admin_blog_update'),
     path('user/admin/blog/delete/<int:pk>', AdminBlogDeleteView.as_view(), name='fithub_admin_blog_delete'),
+    path('user/admin/blog/detail/<int:pk>', AdminBlogDetailView.as_view(), name='fithub_admin_blog_detailview'),
     path('user/admin/blog/list/', AdminBlogListView.as_view(), name='fithub_admin_blog_list'),
 
 
