@@ -4,7 +4,8 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     LogoutView, UserLogin, ChangePasswordView, TrainerDashBoardView, AdminDashBoardView, GymInformationCreateView, \
     GymInformationUpdateView, GymInfoDeleteView, GymInformationListView, TrainerUpdateView, AdminVideoListView, \
     AdminVideoCreateView, AdminVideoUpdateView, AdminVideoDeleteView, AdminBlogCreateView, AdminBlogUpdateView, \
-    AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView
+    AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView, AdminPaymentPlanCreateView, AdminPaymentPlanUpdateView, \
+    AdminPaymentPlanDeleteView, AdminPaymentPlanListView
 
 from django.urls import path
 
@@ -42,6 +43,23 @@ urlpatterns = [
     path('user/admin/blog/delete/<int:pk>', AdminBlogDeleteView.as_view(), name='fithub_admin_blog_delete'),
     path('user/admin/blog/detail/<int:pk>', AdminBlogDetailView.as_view(), name='fithub_admin_blog_detailview'),
     path('user/admin/blog/list/', AdminBlogListView.as_view(), name='fithub_admin_blog_list'),
+
+
+    # Admin PaymentPlan Management
+    path('user/admin/payment/plan/create/', AdminPaymentPlanCreateView.as_view(), name='fithub_admin_payment_plan_create'),
+    path('user/admin/payment/plan/update/<int:pk>', AdminPaymentPlanUpdateView.as_view(), name='fithub_admin_payment_plan_update'),
+    path('user/admin/payment/plan/delete/<int:pk>', AdminPaymentPlanDeleteView.as_view(), name='fithub_admin_payment_plan_delete'),
+    path('user/admin/payment/plan/list/', AdminPaymentPlanListView.as_view(), name='fithub_admin_payment_plan_list'),
+
+    # Add Gym Equipments
+    path('user/admin/equipment/create/', AdminEquipmentCreateView.as_view(), name='fithub_admin_equipment_create'),
+    path('user/admin/equipment/update/<int:pk>', AdminEquipmentUpdateView.as_view(), name='fithub_admin_equipment_update'),
+    path('user/admin/equipment/delete/<int:pk>', AdminEquipmentDeleteView.as_view(), name='fithub_admin_equipment_delete'),
+    path('user/admin/equipment/list/', AdminEquipmentListView.as_view(), name='fithub_admin_equipment_list'),
+
+
+
+
 
 
 

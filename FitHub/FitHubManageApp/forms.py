@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 
-from FitHubManageApp.models import GymInformation, GymTrainer, AdminVideoGallery, Blog
+from FitHubManageApp.models import GymInformation, GymTrainer, AdminVideoGallery, Blog, Plan
 
 
 class AdminstratorCreateForm(forms.ModelForm):
@@ -265,3 +265,29 @@ class AdminBlogCreateForm(forms.ModelForm):
     class Meta:
         model = Blog
         fields = ['title', 'description', 'image']
+
+
+# get PlanCreateForm
+
+class PlanCreateForm(forms.ModelForm):
+    # getting kwargs from view and passing it to form
+    def __init__(self, *args, **kwargs):
+        gym_id = kwargs.pop('gym_id', None)
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['placeholder'] = 'Plan Name'
+        self.fields['name'].widget.attrs['class'] = 'form-control'
+        self.fields['price'].widget.attrs['placeholder'] = 'Plan Price'
+        self.fields['price'].widget.attrs['class'] = 'form-control'
+        self.fields['duration'].widget.attrs['placeholder'] = 'Plan Duration'
+        self.fields['duration'].widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['placeholder'] = 'Plan Description'
+        self.fields['description'].widget.attrs['class'] = 'form-control'
+        self.fields['gym_info'].widget.attrs['placeholder'] = 'Gym Information'
+        self.fields['gym_info'].widget.attrs['class'] = 'form-control'
+        self.fields['gym_info'].widget.attrs['readonly'] = True
+    #     add query based on gym infok
+        self.fields['gym_info'].queryset = GymInformation.objects.filter(id=gym_id)
+
+    class Meta:
+        model = Plan
+        fields = ['name', 'price', 'duration', 'description', 'gym_info']

@@ -8,8 +8,10 @@ from django.views import View
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DeleteView, FormView, DetailView
 
 from FitHubManageApp.forms import AdminstratorCreateForm, TrainerCreateForm, LoginForm, ChangePasswordForm, \
-    GymInformationCreateForm, TrainerUpdateForm, AdminVideoCreateForm, AdminVideoEditForm, AdminBlogCreateForm
-from FitHubManageApp.models import GymInformation, GymAdministator, GymTrainer, GymMember, AdminVideoGallery, Blog
+    GymInformationCreateForm, TrainerUpdateForm, AdminVideoCreateForm, AdminVideoEditForm, AdminBlogCreateForm, \
+    PlanCreateForm
+from FitHubManageApp.models import GymInformation, GymAdministator, GymTrainer, GymMember, AdminVideoGallery, Blog, \
+    Plan, Equipments
 
 
 # Create your views here.
@@ -581,3 +583,178 @@ class AdminBlogDetailView(LoginRequiredMixin, DetailView):
         context["blog_management_tree"] = "menu-open"
         return context
 
+
+class AdminPaymentPlanCreateView(LoginRequiredMixin, CreateView):
+    model = Plan
+    template_name = 'FitHubManageApp/Payment_Plan/admin_payment_plan_add.html'
+    form_class = PlanCreateForm
+    success_url = reverse_lazy('fithub_admin_payment_plan_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["payment_plan_add"] = "active"
+        context["payment_management_tree"] = "menu-open"
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['gym_id'] = self.request.user.gymmember.gym_info.id
+        return kwargs
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['gym_info'] = self.request.user.gymmember.gym_info
+        return initial
+
+    # get initial for gym_info
+
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        if form.is_valid():
+            form.save()
+            messages.success(self.request, 'Plan added successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        return super().form_invalid(form)
+
+
+class AdminPaymentPlanUpdateView(LoginRequiredMixin, UpdateView):
+    model = Plan
+    template_name = 'FitHubManageApp/Payment_Plan/admin_payment_plan_edit.html'
+    form_class = PlanCreateForm
+    success_url = reverse_lazy('fithub_admin_payment_plan_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["payment_plan_list"] = "active"
+        context["payment_management_tree"] = "menu-open"
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['gym_id'] = self.request.user.gymmember.gym_info.id
+        return kwargs
+
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        messages.success(self.request, 'Plan updated successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        return super().form_invalid(form)
+
+
+class AdminPaymentPlanListView(LoginRequiredMixin, ListView):
+    model = Plan
+    template_name = 'FitHubManageApp/Payment_Plan/admin__payment_plan_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["payment_plan_list"] = "active"
+        context["payment_management_tree"] = "menu-open"
+        context["admin_payment_plan_list"] = Plan.objects.all()
+        return context
+
+
+class AdminPaymentPlanDeleteView(LoginRequiredMixin, DeleteView):
+    model = Plan
+    template_name = 'FitHubManageApp/Payment_Plan/admin_plan_delete.html'
+    success_url = reverse_lazy('fithub_admin_payment_plan_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["payment_plan_list"] = "active"
+        context["payment_management_tree"] = "menu-open"
+        return context
+
+
+class AdminEquipmentCreateView(LoginRequiredMixin, CreateView):
+    model = Equipments
+    template_name = 'FitHubManageApp/Gym_Equipment/gym_equipment_add.html'
+    form_class = EquipmentCreateForm
+    success_url = reverse_lazy('fithub_admin_equipment_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["equipment_add"] = "active"
+        context["equipment_management_tree"] = "menu-open"
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['gym_id'] = self.request.user.gymmember.gym_info.id
+        return kwargs
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['gym_info'] = self.request.user.gymmember.gym_info
+        return initial
+
+    # get initial for gym_info
+
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        if form.is_valid():
+            form.save()
+            messages.success(self.request, 'Gym Equipement added successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        return super().form_invalid(form)
+
+
+class AdminEquipmentUpdateView(LoginRequiredMixin, UpdateView):
+    model = Equipments
+    form_class = EquipmentCreateForm
+    template_name = 'FitHubManageApp/Gym_Equipment/gym_equipment_edit.html'
+    success_url = reverse_lazy('fithub_admin_equipment_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["equipment_list"] = "active"
+        context["equipment_management_tree"] = "menu-open"
+        return context
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['gym_id'] = self.request.user.gymmember.gym_info.id
+        return kwargs
+
+    def form_valid(self, form):
+        print("cleaned dataaa ", form.cleaned_data)
+        messages.success(self.request, 'Gym Equipment updated successfully')
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        return super().form_invalid(form)
+
+
+class AdminEquipmentListView(LoginRequiredMixin, ListView):
+    model = Equipments
+    template_name = 'FitHubManageApp/Gym_Equipment/gym_equipment_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["equipment_list"] = "active"
+        context["equipment_management_tree"] = "menu-open"
+        context["admin_equipment_list"] = Equipments.objects.all()
+        return context
+
+
+class AdminEquipmentDeleteView(LoginRequiredMixin, DeleteView):
+    model = Equipments
+    template_name = 'FitHubManageApp/Gym_Equipment/gym_equipement_delete.html'
+    success_url = reverse_lazy('fithub_admin_equipment_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["equipment_list"] = "active"
+        context["equipment_management_tree"] = "menu-open"
+        return context

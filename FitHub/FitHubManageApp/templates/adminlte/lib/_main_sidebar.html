@@ -168,6 +168,29 @@
                     </li>
                 </ul>
             </li>
+
+
+            <li class="nav-item has-tree-view {{ payment_management_tree }}">
+                <a href="#" class="nav-link {% if payment_management_tree == 'menu-open' %} active {% endif %}">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>Payment Plans</p>
+                    <p><i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+
+                <ul class="nav nav-treeview ">
+                    <li class="nav-item">
+                        <a href="{% url 'fithub_admin_payment_plan_create' %}" class="nav-link {{payment_add }}">
+                            <i class="nav-icon fas fa-user"></i>Add Payment Plan
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'fithub_admin_payment_plan_list' %}" class="nav-link {{ plan_list }} ">
+                            <i class="nav-icon fas fa-users"></i> Plans List
+                        </a>
+                    </li>
+                </ul>
+            </li>
 {% comment %}            <li class="nav-item has-tree-view {{ user_tree }}">
                 <a href="#" class="nav-link {% if user_tree == 'menu-open' %} active {% endif %}">
                     <i class="nav-icon fas fa-object-group"></i>
