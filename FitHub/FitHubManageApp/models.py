@@ -110,11 +110,12 @@ class AdminVideoGallery(models.Model):
 
 class Equipments(models.Model):
     name = models.CharField(max_length=512, default='')
+    description = models.CharField(max_length=512, default='')
     image = models.ImageField(upload_to='equipments/', null=True, blank=True, default='equipments/equipment_image.png')
-    sort_order = models.PositiveIntegerField(default=0)
     gym_info = models.ForeignKey('GymInformation', on_delete=models.CASCADE)
     count = models.IntegerField(default=0)
     price = models.IntegerField(default=0)
+    is_available = models.BooleanField(default=True)
 
     def __str__(self):
         return "{}".format(self.name)

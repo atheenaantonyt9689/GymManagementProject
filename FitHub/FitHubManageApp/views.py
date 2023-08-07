@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, ListView,
 
 from FitHubManageApp.forms import AdminstratorCreateForm, TrainerCreateForm, LoginForm, ChangePasswordForm, \
     GymInformationCreateForm, TrainerUpdateForm, AdminVideoCreateForm, AdminVideoEditForm, AdminBlogCreateForm, \
-    PlanCreateForm
+    PlanCreateForm, EquipmentCreateForm
 from FitHubManageApp.models import GymInformation, GymAdministator, GymTrainer, GymMember, AdminVideoGallery, Blog, \
     Plan, Equipments
 

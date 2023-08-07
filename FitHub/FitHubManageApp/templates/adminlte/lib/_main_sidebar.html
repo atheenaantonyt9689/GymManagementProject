@@ -191,6 +191,29 @@
                     </li>
                 </ul>
             </li>
+
+
+            <li class="nav-item has-tree-view {{ equipment_management_tree }}">
+                <a href="#" class="nav-link {% if equipment_management_tree == 'menu-open' %} active {% endif %}">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>Gym Equipments</p>
+                    <p><i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+
+                <ul class="nav nav-treeview ">
+                    <li class="nav-item">
+                        <a href="{% url 'fithub_admin_equipment_create' %}" class="nav-link {{equipment_add }}">
+                            <i class="nav-icon fas fa-user"></i>Add Equipment
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'fithub_admin_equipment_list' %}" class="nav-link {{ plan_list }} ">
+                            <i class="nav-icon fas fa-users"></i> Equipments List
+                        </a>
+                    </li>
+                </ul>
+            </li>
 {% comment %}            <li class="nav-item has-tree-view {{ user_tree }}">
                 <a href="#" class="nav-link {% if user_tree == 'menu-open' %} active {% endif %}">
                     <i class="nav-icon fas fa-object-group"></i>

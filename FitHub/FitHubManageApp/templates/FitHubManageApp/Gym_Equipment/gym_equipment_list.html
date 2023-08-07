@@ -1,9 +1,9 @@
 {% extends 'adminlte/base.html' %}
-{% block title %}Plqn List{% endblock %}
+{% block title %}Equipment List{% endblock %}
 {% block content %}
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Plan List</h3>
+            <h3 class="card-title">Equipment List</h3>
 
             <div class="card-tools">
                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -23,24 +23,25 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Website</th>
-                    <th>Phone</th>
+                    <th>Count</th>
+                    <th>Price</th>
+                    <th>Available</th>
 
 
                 </tr>
                 </thead>
                 <tbody>
-                {% for plan in admin_payment_plan_list %}
+                {% for eqpmnt in admin_equipment_list %}
                 <tr>
-                    <td>{{ plan.name}}</td>
-                    <td>{{plan.duration }}</td>
-                    <td>{{ plan.price}}</td>
-                    <td>{{plan.description }}</td>
+                    <td>{{ eqpmnt.name}}</td>
+                    <td>{{eqpmnt.count }}</td>
+                    <td>{{ eqpmnt.price}}</td>
+                    {% comment %}<td>{{eqpmnt.description }}</td>{% endcomment %}
+                    <td>{{eqpmnt.is_available }}</td>
 
 
-                    <td><a href="{% url 'fithub_admin_payment_plan_update' plan.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
-                    <td><a href="{%  url 'fithub_admin_payment_plan_delete' plan.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+                    <td><a href="{% url 'fithub_admin_equipment_update' eqpmnt.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
+                    <td><a href="{%  url 'fithub_admin_equipment_delete' eqpmnt.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
                 </tr>
                 {% endfor %}
 

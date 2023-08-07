@@ -5,7 +5,8 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     GymInformationUpdateView, GymInfoDeleteView, GymInformationListView, TrainerUpdateView, AdminVideoListView, \
     AdminVideoCreateView, AdminVideoUpdateView, AdminVideoDeleteView, AdminBlogCreateView, AdminBlogUpdateView, \
     AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView, AdminPaymentPlanCreateView, AdminPaymentPlanUpdateView, \
-    AdminPaymentPlanDeleteView, AdminPaymentPlanListView
+    AdminPaymentPlanDeleteView, AdminPaymentPlanListView, AdminEquipmentUpdateView, AdminEquipmentCreateView, \
+    AdminEquipmentDeleteView, AdminEquipmentListView
 
 from django.urls import path
 
