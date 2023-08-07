@@ -1,3 +1,5 @@
+from datetime import time
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -9,14 +11,24 @@ from django.views.generic import TemplateView, CreateView, UpdateView, ListView,
 
 from FitHubManageApp.forms import AdminstratorCreateForm, TrainerCreateForm, LoginForm, ChangePasswordForm, \
     GymInformationCreateForm, TrainerUpdateForm, AdminVideoCreateForm, AdminVideoEditForm, AdminBlogCreateForm, \
-    PlanCreateForm, EquipmentCreateForm
+    PlanCreateForm, EquipmentCreateForm, GymUserCreateForm, GymMembershipPaymentForm
 from FitHubManageApp.models import GymInformation, GymAdministator, GymTrainer, GymMember, AdminVideoGallery, Blog, \
-    Plan, Equipments
+    Plan, Equipments, FitHubMember, Payment
 
 
 # Create your views here.
 class SuperAdminDashBoardView(LoginRequiredMixin, TemplateView):
     template_name = "FitHubManageApp/superadmin/super_admin_dash.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'FitHub'
+        return context
+
+
+# Create your views here.
+class UserAdminDashBoardView(LoginRequiredMixin, TemplateView):
+    template_name = "FitHubManageApp/User/User_dashboard.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -306,12 +318,7 @@ class UserLogin(FormView):
             elif GymTrainer.objects.filter(user=user).exists():
                 return redirect('fithub_trainer_dashboard')
             else:
-                return redirect('home')
-
-
-
-
-
+                return redirect('user_dashboard')
         else:
             return redirect('fithub_login_view')
 
@@ -608,7 +615,6 @@ class AdminPaymentPlanCreateView(LoginRequiredMixin, CreateView):
 
     # get initial for gym_info
 
-
     def form_valid(self, form):
         print("cleaned dataaa ", form.cleaned_data)
         if form.is_valid():
@@ -637,7 +643,6 @@ class AdminPaymentPlanUpdateView(LoginRequiredMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         kwargs['gym_id'] = self.request.user.gymmember.gym_info.id
         return kwargs
-
 
     def form_valid(self, form):
         print("cleaned dataaa ", form.cleaned_data)
@@ -697,7 +702,6 @@ class AdminEquipmentCreateView(LoginRequiredMixin, CreateView):
 
     # get initial for gym_info
 
-
     def form_valid(self, form):
         print("cleaned dataaa ", form.cleaned_data)
         if form.is_valid():
@@ -721,6 +725,7 @@ class AdminEquipmentUpdateView(LoginRequiredMixin, UpdateView):
         context["equipment_list"] = "active"
         context["equipment_management_tree"] = "menu-open"
         return context
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['gym_id'] = self.request.user.gymmember.gym_info.id
@@ -770,3 +775,132 @@ class AdminEquipmentDetailView(LoginRequiredMixin, DetailView):
         context["equipment_list"] = "active"
         context["equipment_management_tree"] = "menu-open"
         return context
+
+
+class GymMembershipPaymentCreate(LoginRequiredMixin, CreateView):
+    model = Payment
+    template_name = 'FitHubManageApp/User/gym_membership_payment.html'
+    form_class = GymMembershipPaymentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user_payment"] = "active"
+        context["user_payment_management_tree"] = "menu-open"
+        plan = self.request.user.fithubmember
+        print("plannnnn ", plan)
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['plan'] = self.request.user.fithubmember.plan_name
+        return kwargs
+
+
+# User Register View
+class UserRegisterView(FormView):
+    form_class = GymUserCreateForm
+    template_name = 'FitHubManageApp/Account/register.html'
+
+    def get_success_url(self):
+        return reverse('fithub_login_view')
+
+    def form_valid(self, form):
+        print("form is valid")
+        print(form.cleaned_data)
+        password = form.cleaned_data['password']
+        first_name = form.cleaned_data['first_name']
+        last_name = form.cleaned_data['last_name']
+        email = form.cleaned_data['email']
+        phone = form.cleaned_data['phone']
+        address = form.cleaned_data['address']
+        plan_name = form.cleaned_data['plan']
+        print("kk  ", plan_name)
+        username = email
+        user_obj = User.objects.filter(username=username).first()
+        if user_obj is None:
+            user_obj = User.objects.create_user(username=username, email=email, password=password,
+                                                first_name=first_name, last_name=last_name)
+            user_obj.save()
+
+        gym_info = GymInformation.objects.first()
+        print("gym_info ", gym_info)
+        if gym_info is not None:
+            print("gym_info obje", gym_info)
+            gym_admin, _ = FitHubMember.objects.get_or_create(user=user_obj, gym_info=gym_info, phone=phone,
+                                                              address=address, plan_name=plan_name)
+            print("gym_admin ", gym_admin)
+            if gym_admin is not None:
+                GymMember.objects.get_or_create(user=user_obj, gym_info=gym_info, is_normal_member=True)
+            messages.success(self.request, "User Created successfully")
+
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        print("form is invalid", form.errors)
+        return super().form_invalid(form)
+
+# class UserRegisterView(FormView):
+#     model = FitHubMember
+#     form_class = GymUserCreateForm
+#     template_name = 'FitHubManageApp/Account/register.html'
+#     success_url = reverse_lazy('fithub_login_view')
+#
+#     def post(self, request, *args, **kwargs):
+#         print("post method")
+#         if request.method == 'POST':
+#             password = request.POST.get('password')
+#             first_name = request.POST.get('first_name')
+#             last_name = request.POST.get('last_name')
+#             email = request.POST.get('email')
+#             phone = request.POST.get('phone')
+#             address = request.POST.get('address')
+#             username = email
+#             user_obj = User.objects.filter(username=username).first()
+#             if user_obj:
+#                 messages.error(self.request,"User already exists")
+#             if user_obj is None:
+#                 user_obj = User.objects.create_user(username=username, email=email, password=password,
+#                                                     first_name=first_name, last_name=last_name)
+#                 user_obj.save()
+#
+#             # gym_info = GymInformation.objects.first()
+#             # print("gym_info ", gym_info)
+#             # print("user info ", user_obj)
+#             # if gym_info is not None:
+#             #     FitHubMember.objects.get_or_create(user=user_obj, gym_info=gym_info, phone=phone, address=address)
+#             #     # if gym_admin is not None:
+#             #     #     GymMember.objects.get_or_create(user=user_obj, gym_info=gym_info, is_admin=True)
+#                 messages.success(self.request, "Successfully Registered")
+#             #     wait for 2 seconds
+#
+#             return redirect('fithub_login_view')
+
+# def form_valid(self, form):
+#     print("form is valid")
+#     print(form.cleaned_data)
+#     password = form.cleaned_data['password']
+#     first_name = form.cleaned_data['first_name']
+#     last_name = form.cleaned_data['last_name']
+#     email = form.cleaned_data['email']
+#     phone = form.cleaned_data['phone']
+#     address = form.cleaned_data['address']
+#     username = email
+#     user_obj = User.objects.filter(username=username).first()
+#     if user_obj is None:
+#         user_obj = User.objects.create_user(username=username, email=email, password=password,
+#                                             first_name=first_name, last_name=last_name)
+#         user_obj.save()
+#     print("user_obj ", user_obj)
+#     gym_info = GymInformation.objects.first()
+#     print("gym_info ", gym_info)
+#     if gym_info is not None:
+#
+#         FitHubMember.objects.get_or_create(user=user_obj, gym_info=gym_info, phone=phone,address=address)
+#         # if gym_admin is not None:
+#         #     GymMember.objects.get_or_create(user=user_obj, gym_info=gym_info, is_admin=True)
+#         messages.success(self.request, "Successfully Registered")
+#     return super().form_valid(form)
+#
+# def form_invalid(self, form):
+#     print("form is invalid", form.errors)
+#     return super().form_invalid(form)

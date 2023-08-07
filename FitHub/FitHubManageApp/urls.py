@@ -6,12 +6,14 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     AdminVideoCreateView, AdminVideoUpdateView, AdminVideoDeleteView, AdminBlogCreateView, AdminBlogUpdateView, \
     AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView, AdminPaymentPlanCreateView, AdminPaymentPlanUpdateView, \
     AdminPaymentPlanDeleteView, AdminPaymentPlanListView, AdminEquipmentUpdateView, AdminEquipmentCreateView, \
-    AdminEquipmentDeleteView, AdminEquipmentListView, AdminEquipmentDetailView
+    AdminEquipmentDeleteView, AdminEquipmentListView, AdminEquipmentDetailView, UserRegisterView, \
+    GymMembershipPaymentCreate, UserAdminDashBoardView
 
 from django.urls import path
 
 urlpatterns = [
     path('superadmin/dashboard', SuperAdminDashBoardView.as_view(), name='superadmin_dashboard'),
+    path('user/dashboard', UserAdminDashBoardView.as_view(), name='user_dashboard'),
     # superadmin section - GymCreation
     path('superadmin/gyminfo/create/', GymInformationCreateView.as_view(), name='superadmin_gym_create'),
     path('superadmin/gyminfo/update/<int:pk>', GymInformationUpdateView.as_view(), name='superadmin_gym_update'),
@@ -59,14 +61,14 @@ urlpatterns = [
     path('user/admin/equipment/detail/<int:pk>', AdminEquipmentDetailView.as_view(), name='fithub_admin_equipment_detailview'),
     path('user/admin/equipment/list/', AdminEquipmentListView.as_view(), name='fithub_admin_equipment_list'),
 
-
-
-
+    # User Payment
+    path('user/payment/', GymMembershipPaymentCreate.as_view(), name='fithub_user_payment'),
 
 
 
 
     # Login Section
+    path('register', UserRegisterView.as_view(), name='fithub_user_register_view'),
     path('', UserLogin.as_view(), name='fithub_login_view'),
     path('logout', LogoutView.as_view(), name='fithub_logout_view'),
     path('user/admins/change_password/', ChangePasswordView.as_view(), name='fithub_administrators_password_change'),

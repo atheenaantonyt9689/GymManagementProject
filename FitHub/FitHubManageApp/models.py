@@ -15,15 +15,16 @@ class FitHubMember(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    email = models.EmailField(max_length=100, unique=True)
-    designation = models.CharField(max_length=200)
+    designation = models.CharField(max_length=200, null=True, blank=True)
     address = models.CharField(max_length=200)
     phone = models.CharField(max_length=10)
-    sex = models.CharField(choices=GenderChoices, max_length=10)
+    sex = models.CharField(choices=GenderChoices, max_length=10, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     plan = models.ForeignKey('Plan', on_delete=models.CASCADE, null=True, blank=True)
     payment_status = models.BooleanField(default=False)
     joining_date = models.DateTimeField(auto_now=True)
+    gym_info = models.ForeignKey('GymInformation', on_delete=models.CASCADE)
+    plan_name = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.username}"
