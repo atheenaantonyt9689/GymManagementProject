@@ -294,6 +294,8 @@ class PlanCreateForm(forms.ModelForm):
 
 
 class EquipmentCreateForm(forms.ModelForm):
+    # required True for Image field
+    image = forms.ImageField(required=True)
     def __init__(self, *args, **kwargs):
         gym_id = kwargs.pop('gym_id', None)
         super().__init__(*args, **kwargs)

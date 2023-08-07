@@ -6,7 +6,7 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     AdminVideoCreateView, AdminVideoUpdateView, AdminVideoDeleteView, AdminBlogCreateView, AdminBlogUpdateView, \
     AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView, AdminPaymentPlanCreateView, AdminPaymentPlanUpdateView, \
     AdminPaymentPlanDeleteView, AdminPaymentPlanListView, AdminEquipmentUpdateView, AdminEquipmentCreateView, \
-    AdminEquipmentDeleteView, AdminEquipmentListView
+    AdminEquipmentDeleteView, AdminEquipmentListView, AdminEquipmentDetailView
 
 from django.urls import path
 
@@ -56,6 +56,7 @@ urlpatterns = [
     path('user/admin/equipment/create/', AdminEquipmentCreateView.as_view(), name='fithub_admin_equipment_create'),
     path('user/admin/equipment/update/<int:pk>', AdminEquipmentUpdateView.as_view(), name='fithub_admin_equipment_update'),
     path('user/admin/equipment/delete/<int:pk>', AdminEquipmentDeleteView.as_view(), name='fithub_admin_equipment_delete'),
+    path('user/admin/equipment/detail/<int:pk>', AdminEquipmentDetailView.as_view(), name='fithub_admin_equipment_detailview'),
     path('user/admin/equipment/list/', AdminEquipmentListView.as_view(), name='fithub_admin_equipment_list'),
 
 

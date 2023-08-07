@@ -758,3 +758,15 @@ class AdminEquipmentDeleteView(LoginRequiredMixin, DeleteView):
         context["equipment_list"] = "active"
         context["equipment_management_tree"] = "menu-open"
         return context
+
+
+class AdminEquipmentDetailView(LoginRequiredMixin, DetailView):
+    model = Equipments
+    template_name = 'FitHubManageApp/Gym_Equipment/equipment_detail_view.html'
+    success_url = reverse_lazy('fithub_admin_equipment_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["equipment_list"] = "active"
+        context["equipment_management_tree"] = "menu-open"
+        return context
