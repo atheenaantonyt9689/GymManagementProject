@@ -27,7 +27,7 @@
             </div>
 
             <div class="card-body">
-                <img class="img-fluid pad text-center" src="{{ object.image.url }}" alt="Photo" height="60%" width="60%">
+                <img class="img-fluid pad text-center" src="{% if object.image %}{{ object.image.url }}{% else %}https://img.huffingtonpost.com/asset/5cd602f62500005500a47ed5.jpeg?ops=scalefit_720_noupscale&format=webp {% endif %}" alt="Photo" height="60%" width="60%">
 
             </div>
 

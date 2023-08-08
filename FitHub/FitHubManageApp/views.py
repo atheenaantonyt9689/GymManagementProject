@@ -43,6 +43,7 @@ class AdminDashBoardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'FitHub'
         context["admin_side"] = "active"
+        context["user_regstred"] = FitHubMember.objects.filter(gym_info_id=self.request.user.gymmember.gym_info.id).count()
 
         return context
 

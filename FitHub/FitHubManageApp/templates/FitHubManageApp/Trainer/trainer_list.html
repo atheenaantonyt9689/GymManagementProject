@@ -7,6 +7,7 @@
 
             <div class="card-tools">
                 <div class="input-group-append">
+
                     <a href="{% url 'fithub_trainer_create' %}">
                         <button class="btn btn-primary">
                             Add Trainer
@@ -40,9 +41,11 @@
                 <tr>
                     <td>{{ trainer.user.username }}</td>
                     <td>{{ trainer.user.get_full_name}}</td>
+                {% comment %}{% if request.user|is_trainer or request.user|is_administrator %}{% endcomment %}
 
                     <td><a href="{% url 'fithub_trainer_update' trainer.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
                     <td><a href="{%  url 'fithub_trainer_delete' trainer.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+              {% comment %}  {% endif %}{% endcomment %}
                 </tr>
                 {% endfor %}
 

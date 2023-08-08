@@ -1,12 +1,14 @@
 {% extends 'adminlte/lib/_main_sidebar.html' %}
 {% load user_tags %}
 {% load static %}
- {% block logo %}
-        <a href="/" class="brand-link">
-            <img src="{%static 'admin-lte/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            {% block logo_text %}<span class="brand-text font-weight-light">FitHub </span>{% endblock %}
-        </a>
-    {% endblock %}
+{% block logo %}
+    {% comment %} TODO Need to ocrrect Siddebar {% endcomment %}
+    <a href="/" class="brand-link">
+        <img src="{% static 'admin-lte/dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+             class="brand-image img-circle elevation-3" style="opacity: .8">
+        {% block logo_text %}<span class="brand-text font-weight-light">FitHub </span>{% endblock %}
+    </a>
+{% endblock %}
 {
 {% block nav_links %}
     {% comment %}<li class="nav-item">
@@ -15,47 +17,48 @@
             <p>Example link</p>
         </a>
     </li>{% endcomment %}
-      {% comment %}  <li class="nav-item">
+    {% comment %}  <li class="nav-item">
             <a href="{% url 'home' %}" class="nav-link {{ admin_side }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>DashBoard</p>
             </a>
         </li>{% endcomment %}
 
-     {% if request.user.is_superuser %}
-         <li class="nav-item">
-             <a href="{% url 'superadmin_dashboard' %}" class="nav-link {{ supervisor_dash }}">
-                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                 <p>DashBoard</p>
-             </a>
-         </li>
+    {% if request.user.is_superuser %}
+        <li class="nav-item">
+            <a href="{% url 'superadmin_dashboard' %}" class="nav-link {{ supervisor_dash }}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>DashBoard</p>
+            </a>
+        </li>
 
-           <li class="nav-item has-tree-view {{ gym_management_tree }}">
-                <a href="#" class="nav-link {% if trainer_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>GYM Management</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
+        <li class="nav-item has-tree-view {{ gym_management_tree }}">
+            <a href="#" class="nav-link {% if trainer_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>GYM Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
 
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'superadmin_gym_create' %}" class="nav-link {{gym_information_add }}">
-                            <i class="nav-icon fas fa-user"></i>Add Gym
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'superadmin_gym_list' %}" class="nav-link {{ gym_list }} ">
-                            <i class="nav-icon fas fa-users"></i> Gym List
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'superadmin_gym_create' %}" class="nav-link {{ gym_information_add }}">
+                        <i class="nav-icon fas fa-user"></i>Add Gym
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'superadmin_gym_list' %}" class="nav-link {{ gym_list }} ">
+                        <i class="nav-icon fas fa-users"></i> Gym List
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
-     {% else %}
+    {% elif request.user|is_administrator %}
 
-           {% comment %} <li class="nav-item has-tree-view {{ admin_management_tree }}">
+
+        {% comment %} <li class="nav-item has-tree-view {{ admin_management_tree }}">
                 <a href="#" class="nav-link {% if admin_management_tree == 'menu-open' %} active {% endif %}">
                     <i class="nav-icon fas fa-users"></i>
                     <p>Gym Info</p>
@@ -78,14 +81,14 @@
             </li>
 {% endcomment %}
 
-            <li class="nav-item has-tree-view {{ admin_management_tree }}">
-                <a href="#" class="nav-link {% if admin_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>Admin Management</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                {% comment %}<ul class="nav nav-treeview ">
+        <li class="nav-item has-tree-view {{ admin_management_tree }}">
+            <a href="#" class="nav-link {% if admin_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Admin Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            {% comment %}<ul class="nav nav-treeview ">
                     <li class="nav-item">
                         <a href="{% url 'fithub_admin_create' %}" class="nav-link {{ admin_add }}">
                             <i class="nav-icon fas fa-user"></i>Add Administrator
@@ -98,255 +101,332 @@
                     </li>
                 </ul>{% endcomment %}
 
-            </li>
+        </li>
 
 
-            <li class="nav-item has-tree-view {{ trainer_management_tree }}">
-                <a href="#" class="nav-link {% if trainer_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-users"></i>
-                    <p>Trainer Management</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
+        <li class="nav-item has-tree-view {{ trainer_management_tree }}">
+            <a href="#" class="nav-link {% if trainer_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Trainer Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
 
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_trainer_create' %}" class="nav-link {{trainer_add }}">
-                            <i class="nav-icon fas fa-user"></i>Add Trainer
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_trainer_list' %}" class="nav-link {{ trainers_list }} ">
-                            <i class="nav-icon fas fa-users"></i> Trainers List
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-
-            <li class="nav-item has-tree-view {{ video_management_tree }}">
-                <a href="#" class="nav-link {% if video_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-video"></i>
-                    <p>Video Management</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_video_create' %}" class="nav-link {{video_add }}">
-                            <i class="nav-icon fas fa-plus"></i>Add Video
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_video_list' %}" class="nav-link {{ video_list }} ">
-                            <i class="nav-icon fas fa-columns"></i> Video List
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_trainer_create' %}" class="nav-link {{ trainer_add }}">
+                        <i class="nav-icon fas fa-user"></i>Add Trainer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_trainer_list' %}" class="nav-link {{ trainers_list }} ">
+                        <i class="nav-icon fas fa-users"></i> Trainers List
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
-            <li class="nav-item has-tree-view {{ blog_management_tree }}">
-                <a href="#" class="nav-link {% if blog_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-image"></i>
-                    <p>Blogs</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
+        <li class="nav-item has-tree-view {{ video_management_tree }}">
+            <a href="#" class="nav-link {% if video_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-video"></i>
+                <p>Video Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
 
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_blog_create' %}" class="nav-link {{blog_add }}">
-                            <i class="nav-icon fas fa-plus-circle"></i>Add Blog
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_blog_list' %}" class="nav-link {{ blog_list }} ">
-                            <i class="nav-icon fas fa-columns"></i> Blogs List
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
-
-            <li class="nav-item has-tree-view {{ payment_management_tree }}">
-                <a href="#" class="nav-link {% if payment_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-copy"></i>
-                    <p>Payment Plans</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_payment_plan_create' %}" class="nav-link {{payment_add }}">
-                            <i class="nav-icon fas fa-plus-circle"></i>Add Payment Plan
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_payment_plan_list' %}" class="nav-link {{ plan_list }} ">
-                            <i class="nav-icon fas fa-columns"></i> Plans List
-                        </a>
-                    </li>
-                </ul>
-            </li>
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_video_create' %}" class="nav-link {{ video_add }}">
+                        <i class="nav-icon fas fa-plus"></i>Add Video
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_video_list' %}" class="nav-link {{ video_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Video List
+                    </a>
+                </li>
+            </ul>
+        </li>
 
 
-            <li class="nav-item has-tree-view {{ equipment_management_tree }}">
-                <a href="#" class="nav-link {% if equipment_management_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Gym Equipments</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
+        <li class="nav-item has-tree-view {{ blog_management_tree }}">
+            <a href="#" class="nav-link {% if blog_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-image"></i>
+                <p>Blogs</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
 
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_blog_create' %}" class="nav-link {{ blog_add }}">
+                        <i class="nav-icon fas fa-plus-circle"></i>Add Blog
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_blog_list' %}" class="nav-link {{ blog_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Blogs List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ payment_management_tree }}">
+            <a href="#" class="nav-link {% if payment_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Payment Plans</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_payment_plan_create' %}" class="nav-link {{ payment_add }}">
+                        <i class="nav-icon fas fa-plus-circle"></i>Add Payment Plan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_payment_plan_list' %}" class="nav-link {{ plan_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Plans List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ equipment_management_tree }}">
+            <a href="#" class="nav-link {% if equipment_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Gym Equipments</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_equipment_create' %}" class="nav-link {{ equipment_add }}">
+                        <i class="nav-icon fas fa-plus-square "></i>Add Equipment
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_equipment_list' %}" class="nav-link {{ plan_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Equipments List
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% elif request.user|is_trainer %}
+
+        <li class="nav-item has-tree-view {{ trainer_management_tree }}">
+            <a href="#" class="nav-link {% if trainer_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Trainer Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_trainer_create' %}" class="nav-link {{ trainer_add }}">
+                        <i class="nav-icon fas fa-user"></i>Add Trainer
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_trainer_list' %}" class="nav-link {{ trainers_list }} ">
+                        <i class="nav-icon fas fa-users"></i> Trainers List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ video_management_tree }}">
+            <a href="#" class="nav-link {% if video_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-video"></i>
+                <p>Video Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_video_create' %}" class="nav-link {{ video_add }}">
+                        <i class="nav-icon fas fa-plus"></i>Add Video
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_video_list' %}" class="nav-link {{ video_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Video List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ blog_management_tree }}">
+            <a href="#" class="nav-link {% if blog_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-image"></i>
+                <p>Blogs</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_blog_create' %}" class="nav-link {{ blog_add }}">
+                        <i class="nav-icon fas fa-plus-circle"></i>Add Blog
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_blog_list' %}" class="nav-link {{ blog_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Blogs List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ payment_management_tree }}">
+            <a href="#" class="nav-link {% if payment_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Payment Plans</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_payment_plan_create' %}" class="nav-link {{ payment_add }}">
+                        <i class="nav-icon fas fa-plus-circle"></i>Add Payment Plan
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_payment_plan_list' %}" class="nav-link {{ plan_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Plans List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ equipment_management_tree }}">
+            <a href="#" class="nav-link {% if equipment_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Gym Equipments</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_equipment_create' %}" class="nav-link {{ equipment_add }}">
+                        <i class="nav-icon fas fa-plus-square "></i>Add Equipment
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_equipment_list' %}" class="nav-link {{ plan_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Equipments List
+                    </a>
+                </li>
+            </ul>
+        </li>
+    {% else %}
+        <li class="nav-item has-tree-view {{ equipment_management_tree }}">
+            <a href="#" class="nav-link {% if equipment_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>Gym Equipments</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                {% comment %} <li class="nav-item">
                         <a href="{% url 'fithub_admin_equipment_create' %}" class="nav-link {{equipment_add }}">
                             <i class="nav-icon fas fa-plus-square "></i>Add Equipment
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'fithub_admin_equipment_list' %}" class="nav-link {{ plan_list }} ">
-                            <i class="nav-icon fas fa-columns"></i> Equipments List
-                        </a>
-                    </li>
-                </ul>
-            </li>
-{% comment %}            <li class="nav-item has-tree-view {{ user_tree }}">
-                <a href="#" class="nav-link {% if user_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-object-group"></i>
-                    <p>Manage Users</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_user_list' %}" class="nav-link {{ user_list }}">
-                            <i class="nav-icon fas fa-circle"></i> Users List
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_user_add' %}" class="nav-link {{ user_add }} ">
-                            <i class="nav-icon fas fa-user"></i> Add Users
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item has-tree-view {{ beacon_tree }}">
-                <a href="#" class="nav-link {% if beacon_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-broadcast-tower"></i>
-                    <p>Manage Beacons</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_beacon_list' %}" class="nav-link {{ beacon_list }}">
-                            <i class="nav-icon fas fa-circle"></i> Beacon List
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_beacon_add' %}" class="nav-link {{ beacon_add }} ">
-                            <i class="nav-icon fas fa-user"></i> Add Becons
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'admin_dash_beacon_assign' %}" class="nav-link {{ beacon_assign }}">
-                    <i class="nav-icon fas fa-bullhorn"></i>
-                    <p>Assign Beacon</p>
-                </a>
-            </li>
-            <li class="nav-item has-tree-view {{ receiver_tree }}">
-                <a href="#" class="nav-link {% if receiver_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-satellite-dish"></i>
-                    <p>Manage Receiver</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_receiver_list' %}" class="nav-link {{ receiver_list }}">
-                            <i class="nav-icon fas fa-list"></i> Receiver List
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_recever_add' %}" class="nav-link {{ receiver_add }} ">
-                            <i class="nav-icon fas fa-plus"></i> Add Receiver
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                    </li>{% endcomment %}
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_equipment_list' %}" class="nav-link {{ plan_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Equipments List
+                    </a>
+                </li>
+            </ul>
+        </li>
 
-            <li class="nav-item has-tree-view {{ group_tree }}">
-                <a href="#" class="nav-link {% if group_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-signal"></i>
-                    <p>Manage Groups</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_group_list' %}" class="nav-link {{ group_list }}">
-                            <i class="nav-icon fas fa-list"></i> Group List
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_group_add' %}" class="nav-link {{ group_add }} ">
-                            <i class="nav-icon fas fa-plus"></i> Add Group
-                        </a>
-                    </li>
-                </ul>
-            </li>
+        <li class="nav-item has-tree-view {{ trainer_management_tree }}">
+            <a href="#" class="nav-link {% if trainer_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-users"></i>
+                <p>Trainers</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
 
-            <li class="nav-item has-tree-view {{ point_tree }}">
-                <a href="#" class="nav-link {% if point_tree == 'menu-open' %} active {% endif %}">
-                    <i class="nav-icon fas fa-dot-circle"></i>
-                    <p>Manage Points</p>
-                    <p><i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview ">
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_point_list' %}" class="nav-link {{ point_list }}">
-                            <i class="nav-icon fas fa-list"></i> Point List
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{% url 'admin_dash_point_add' %}" class="nav-link {{ point_add }} ">
-                            <i class="nav-icon fas fa-plus"></i> Add Point
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'admin_dash_beacon_locations_list' %}" class="nav-link {{ location_list }}">
-                    <i class="nav-icon fas fa-list-alt"></i>
-                    <p>Location List</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'admin_dash_objects_on_floorplan' %}" class="nav-link {{ floor_plan }}">
-                    <i class="nav-icon fas fa-list-alt"></i>
-                    <p>Manage FloorPlan</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'admin_dash_beacon_realtime_tracking_on_floorpaln' %}" class="nav-link {{ realtime_tracking }}">
-                    <i class="nav-icon fas fa-sign"></i>
-                    <p>RealTime Tracking</p>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{% url 'admin_dash_beacon_path_tracking_on_floorpaln' %}" class="nav-link {{ path_tracking }}">
-                    <i class="nav-icon fas fa-window-restore"></i>
-                    <p>Path Tracking</p>
-                </a>
-            </li>{% endcomment %}
-    {% endif %}
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_trainer_list' %}" class="nav-link {{ trainers_list }} ">
+                        <i class="nav-icon fas fa-users"></i> Trainers List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ video_management_tree }}">
+            <a href="#" class="nav-link {% if video_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-video"></i>
+                <p>Video Management</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_video_list' %}" class="nav-link {{ video_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Video List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ blog_management_tree }}">
+            <a href="#" class="nav-link {% if blog_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-image"></i>
+                <p>Blogs</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_blog_list' %}" class="nav-link {{ blog_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Blogs List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+
+        <li class="nav-item has-tree-view {{ payment_management_tree }}">
+            <a href="#" class="nav-link {% if payment_management_tree == 'menu-open' %} active {% endif %}">
+                <i class="nav-icon fas fa-copy"></i>
+                <p>Payment Plans</p>
+                <p><i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+
+            <ul class="nav nav-treeview ">
+                <li class="nav-item">
+                    <a href="{% url 'fithub_admin_payment_plan_list' %}" class="nav-link {{ plan_list }} ">
+                        <i class="nav-icon fas fa-columns"></i> Plans List
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+{% endif %}
 
 
 

@@ -39,7 +39,10 @@
 
 
                     <td><a href="{% url 'fithub_admin_blog_detailview' blog.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-readme"></i>ReadMore</a></td>
-                    <td><a href="{%  url 'fithub_admin_blog_delete' blog.id %}" type="button" class="btn btn-block btn-danger">Delete</a></td>
+
+                      {% if request.user.is_trainer or request.user.is_administrator %}
+                    <a href="{%  url 'fithub_admin_blog_delete' blog.id %}" type="button" class="btn btn-block btn-danger">Delete</a></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
 
