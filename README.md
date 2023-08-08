@@ -1,4 +1,4 @@
 # GymManagementProject
-install requirements
-create superuser 
+install requirements and create superuser
+
 
