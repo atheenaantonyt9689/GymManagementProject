@@ -1,4 +1,5 @@
 {% extends 'adminlte/base.html' %}
+{% load user_tags %}
 {% block title %}Trainer List{% endblock %}
 {% block content %}
     <div class="card">
@@ -6,14 +7,16 @@
             <h3 class="card-title">Trainer List</h3>
 
             <div class="card-tools">
+                  {% if request.user|is_trainer or request.user|is_administrator %}
                 <div class="input-group-append">
-
                     <a href="{% url 'fithub_trainer_create' %}">
                         <button class="btn btn-primary">
                             Add Trainer
                         </button>
                         </a>
+
                     </div>
+                {% endif %}
                 {% comment %}<div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
 
@@ -32,6 +35,10 @@
                 <tr>
                     <th>UserName</th>
                     <th>Name</th>
+                    <th>Email</th>
+
+
+
 
 
                 </tr>
@@ -41,11 +48,12 @@
                 <tr>
                     <td>{{ trainer.user.username }}</td>
                     <td>{{ trainer.user.get_full_name}}</td>
-                {% comment %}{% if request.user|is_trainer or request.user|is_administrator %}{% endcomment %}
+                    <td>{{ trainer.user.email }}</td>
+                {% if request.user|is_trainer or request.user|is_administrator %}
 
                     <td><a href="{% url 'fithub_trainer_update' trainer.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
                     <td><a href="{%  url 'fithub_trainer_delete' trainer.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
-              {% comment %}  {% endif %}{% endcomment %}
+                {% endif %}
                 </tr>
                 {% endfor %}
 
