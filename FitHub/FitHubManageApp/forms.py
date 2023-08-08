@@ -441,4 +441,4 @@ class GymUserCreateForm(forms.ModelForm):
         if user:
             # messages.error(self.request, 'User with the given email already exists')
             raise ValidationError('User with the given email already exists')
-        return self.data['email']
+        return super().clean()

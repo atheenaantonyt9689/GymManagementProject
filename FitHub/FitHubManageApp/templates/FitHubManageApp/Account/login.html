@@ -27,6 +27,7 @@
 
       <form action="" method="post">
           {% csrf_token %}
+          <p style="color: #dc0032;">{{ error }}</p>
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="User Name" name="username" id="id_username">
           <div class="input-group-append">

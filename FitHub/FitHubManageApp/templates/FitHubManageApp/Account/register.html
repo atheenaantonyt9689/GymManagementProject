@@ -15,6 +15,12 @@
     <link rel="stylesheet" href="{% static 'admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{% static 'admin-lte/dist/css/adminlte.min.css' %}">
+    <style>
+        .errorlist {
+            color: red;
+        }
+    </style>
+    {{ form.media.css }}
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
@@ -27,6 +33,7 @@
             <p class="login-box-msg">Register To Fithub</p>
             <form action="" method="post">
                 {% csrf_token %}
+                {#                  <p style="color: #dc0032;">{{ error }}</p>#}
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="First Name" name="first_name"
                            id="id_first_name">
@@ -44,6 +51,7 @@
                         </div>
                     </div>
                 </div>
+                <p>{{ form.email.errors }}</p>
                 <div class="input-group mb-3">
                     <input type="email" class="form-control" placeholder="Email" name="email" id="id_email">
                     <div class="input-group-append">
@@ -52,7 +60,9 @@
                         </div>
                     </div>
                 </div>
+                <p>{{ form.password.errors }}</p>
                 <div class="input-group mb-3">
+
                     <input type="password" class="form-control" placeholder="Password" name="password" id="id_password">
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -97,8 +107,9 @@
                     </div>
                 </div>
                 <div class="row">
-                     <div class="col-4">
-                        <a href="{% url 'fithub_login_view' %}"  {% comment %}class="btn btn-primary btn-block"{% endcomment %}>Sign In</a>
+                    <div class="col-4">
+                        <a href="{% url 'fithub_login_view' %}"  {% comment %}class="btn btn-primary btn-block"{% endcomment %}>Sign
+                            In</a>
                     </div>
                     <div class="col-4">
                     </div>

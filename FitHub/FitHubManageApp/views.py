@@ -304,9 +304,34 @@ class UserLogin(FormView):
     success_url = reverse_lazy('superadmin_dashboard')
     form_class = LoginForm
 
-    def post(self, request, *args, **kwargs):
-        username = self.request.POST.get('username')
-        password = self.request.POST.get('password')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
+    # def post(self, request, *args, **kwargs):
+    #     username = self.request.POST.get('username')
+    #     password = self.request.POST.get('password')
+    #     user = authenticate(self.request, username=username, password=password)
+    #     print("from authen ", user)
+    #     if user is not None:
+    #         login(self.request, user)
+    #         # check the user is superuser
+    #         if user.is_superuser:
+    #             return redirect('superadmin_dashboard')
+    #         if GymAdministator.objects.filter(user=user).exists():
+    #             return redirect('fithub_admin_dashboard')
+    #         elif GymTrainer.objects.filter(user=user).exists():
+    #             return redirect('fithub_trainer_dashboard')
+    #         else:
+    #             return redirect('user_dashboard')
+    #     else:
+    #         context = self.get_context_data()
+    #         context['error'] = 'Username or Password Mismatch!!'
+    #         return redirect
+
+    def form_valid(self, form):
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
         user = authenticate(self.request, username=username, password=password)
         print("from authen ", user)
         if user is not None:
@@ -320,12 +345,19 @@ class UserLogin(FormView):
                 return redirect('fithub_trainer_dashboard')
             else:
                 return redirect('user_dashboard')
-        else:
-            return redirect('fithub_login_view')
+
+        context = self.get_context_data()
+        context['error'] = 'Username or Password Mismatch!!'
+        return render(self.request, self.template_name, context=context)
+    def form_invalid(self, form):
+        context = self.get_context_data()
+        print(form.errors)
+        context['error'] = 'Could not signin! Please refresh the page and try again.'
+        return render(self.request, self.template_name, context=context)
+
 
 
 class LogoutView(View):
-
     def get(self, request):
         logout(request)
         return redirect('fithub_login_view')
@@ -805,10 +837,15 @@ class UserRegisterView(FormView):
     def get_success_url(self):
         return reverse('fithub_login_view')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
     def form_valid(self, form):
         print("form is valid")
         print(form.cleaned_data)
         password = form.cleaned_data['password']
+        confirm_password = form.cleaned_data['confirm_password']
         first_name = form.cleaned_data['first_name']
         last_name = form.cleaned_data['last_name']
         email = form.cleaned_data['email']
@@ -817,12 +854,19 @@ class UserRegisterView(FormView):
         plan_name = form.cleaned_data['plan']
         print("kk  ", plan_name)
         username = email
+        context = self.get_context_data()
+        if password != confirm_password:
+            context["error"] = "Password mismatch occurred"
+
         user_obj = User.objects.filter(username=username).first()
+        if user_obj:
+            form.add_error(None, 'User with the given email already exists!')
+            # context["error"] = "User already exists"
+            return self.form_invalid(form)
         if user_obj is None:
             user_obj = User.objects.create_user(username=username, email=email, password=password,
                                                 first_name=first_name, last_name=last_name)
             user_obj.save()
-
         gym_info = GymInformation.objects.first()
         print("gym_info ", gym_info)
         if gym_info is not None:
