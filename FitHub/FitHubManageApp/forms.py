@@ -374,25 +374,28 @@ class EquipmentCreateForm(forms.ModelForm):
 
 
 class GymMembershipPaymentForm(forms.ModelForm):
-    payment_method = forms.CharField(max_length=100)
+    payment_method = forms.CharField(max_length=100, required=False)
+    card_details = forms.CharField(max_length=100)
 
     def __init__(self, *args, **kwargs):
-        plan_name = kwargs.pop('plan', None)
+        plan_name = kwargs.pop('plan_name', None)
         super().__init__(*args, **kwargs)
         self.fields['payment_method'].widget.attrs['placeholder'] = 'Payment Method(Online)'
         self.fields['payment_method'].widget.attrs['class'] = 'form-control'
         self.fields['payment_method'].widget.attrs['readonly'] = True
         self.fields['amount'].widget.attrs['placeholder'] = 'Payment Amount'
         self.fields['amount'].widget.attrs['class'] = 'form-control'
-        self.fields['amount'].widget.attrs['readonly'] = True
+
         self.fields['plan'].widget.attrs['placeholder'] = 'Plan'
         self.fields['plan'].widget.attrs['class'] = 'form-control'
         self.fields['plan'].widget.attrs['readonly'] = True
-        self.fields['plan'].queryset = Plan.objects.filter(name=plan_name).first()
+        self.fields['card_details'].widget.attrs['placeholder'] = 'Card Number'
+        self.fields['card_details'].widget.attrs['class'] = 'form-control'
+        self.fields['plan'].queryset = Plan.objects.filter(name=plan_name)
 
     class Meta:
         model = Payment
-        fields = ['plan', 'amount', 'payment_method']
+        fields = ['amount', 'payment_method','plan', 'card_details']
 
 
 class GymUserCreateForm(forms.ModelForm):
@@ -400,7 +403,7 @@ class GymUserCreateForm(forms.ModelForm):
     confirm_password = forms.CharField(widget=forms.PasswordInput())
     phone = forms.CharField(max_length=10)
     address = forms.CharField(max_length=200)
-    plan = forms.CharField(max_length=100, required=False)
+    plan_name = forms.CharField(max_length=100, required=False)
 
     # override the fields of the model
     def __init__(self, *args, **kwargs):
@@ -420,13 +423,13 @@ class GymUserCreateForm(forms.ModelForm):
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['confirm_password'].widget.attrs['placeholder'] = 'Confirm Password'
         self.fields['confirm_password'].widget.attrs['class'] = 'form-control'
-        self.fields['plan'].widget.attrs['placeholder'] = 'Plan'
-        self.fields['plan'].widget.attrs['class'] = 'form-control'
+        self.fields['plan_name'].widget.attrs['placeholder'] = 'Plan'
+        self.fields['plan_name'].widget.attrs['class'] = 'form-control'
         # self.fields['plan'].queryset = Plan.objects.all()
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'password', 'confirm_password', 'plan', 'phone', 'address']
+        fields = ['first_name', 'last_name', 'email', 'password', 'confirm_password', 'plan_name', 'phone', 'address']
 
     def clean_password(self):
 
@@ -435,7 +438,7 @@ class GymUserCreateForm(forms.ModelForm):
         validate_password(self.data['password'])
         return self.data['password']
 
-    def clean_email(self):
+    def clean(self):
         validate_email(self.data['email'])
         user = User.objects.filter(username=self.data['email']).first()
         if user:

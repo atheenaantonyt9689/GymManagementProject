@@ -76,6 +76,7 @@ class GymMember(models.Model):
     is_admin = models.BooleanField(default=False)
     is_trainer = models.BooleanField(default=False)
     is_normal_member = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username}"
@@ -137,8 +138,6 @@ class Payment(models.Model):
     member = models.ForeignKey('FitHubMember', on_delete=models.CASCADE)
     amount = models.IntegerField(default=0)
     payment_date = models.DateTimeField(auto_now=True)
-    payment_status = models.BooleanField(default=False)
-    gym_info = models.ForeignKey('GymInformation', on_delete=models.CASCADE)
     plan = models.ForeignKey('Plan', on_delete=models.CASCADE)
 
 

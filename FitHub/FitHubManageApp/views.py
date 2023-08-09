@@ -43,7 +43,8 @@ class AdminDashBoardView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'FitHub'
         context["admin_side"] = "active"
-        context["user_regstred"] = FitHubMember.objects.filter(gym_info_id=self.request.user.gymmember.gym_info.id).count()
+        context["user_regstred"] = FitHubMember.objects.filter(
+            gym_info_id=self.request.user.gymmember.gym_info.id).count()
 
         return context
 
@@ -344,17 +345,31 @@ class UserLogin(FormView):
             elif GymTrainer.objects.filter(user=user).exists():
                 return redirect('fithub_trainer_dashboard')
             else:
-                return redirect('user_dashboard')
+                # get payment done or not,  if done redirect to user dashboard else redirect to payment page
+                gym_member = GymMember.objects.filter(user=self.request.user, is_normal_member =True).first()
+                if gym_member is None:
+                    return redirect('fithub_user_payment')
+                else:
+                    return redirect('user_dashboard')
+                    # if gym_member.is_paid:
+                    #     return redirect('user_dashboard')
+                    # else:
+
+                print("not gymmember ")
+                # error message
+
+                messages.error("Something Went Wrong!!")
+                return redirect('fithub_login_view')
 
         context = self.get_context_data()
         context['error'] = 'Username or Password Mismatch!!'
         return render(self.request, self.template_name, context=context)
+
     def form_invalid(self, form):
         context = self.get_context_data()
         print(form.errors)
         context['error'] = 'Could not signin! Please refresh the page and try again.'
         return render(self.request, self.template_name, context=context)
-
 
 
 class LogoutView(View):
@@ -810,23 +825,51 @@ class AdminEquipmentDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class GymMembershipPaymentCreate(LoginRequiredMixin, CreateView):
+class GymMembershipPaymentCreate(LoginRequiredMixin, FormView):
     model = Payment
     template_name = 'FitHubManageApp/User/gym_membership_payment.html'
     form_class = GymMembershipPaymentForm
+
+    def get_success_url(self):
+        return reverse('user_dashboard')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["user_payment"] = "active"
         context["user_payment_management_tree"] = "menu-open"
-        plan = self.request.user.fithubmember
-        print("plannnnn ", plan)
         return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['plan'] = self.request.user.fithubmember.plan_name
+        kwargs['plan_name'] = self.request.user.fithubmember.plan_name
         return kwargs
+
+    #     get form valid method
+    def form_valid(self, form):
+        # plan_name = self.request.user.fithubmember.plan_name
+
+        print("cleaned dataaa ", form.cleaned_data)
+        print("form is valid")
+        plan = form.cleaned_data['plan']
+        print("plaaaaaaaaaaasssnnnn ", plan)
+        amount = form.cleaned_data['amount']
+
+        # # get_or_create Payment()
+        payment_obj, _= Payment.objects.get_or_create(member=self.request.user.fithubmember,amount=amount, plan=plan)
+        payment_obj.save()
+        if payment_obj:
+            # update the is_paid field in GymMember
+            gym_member = GymMember.objects.get_or_create(user=self.request.user,gym_info=self.request.user.fithubmember.gym_info, is_normal_member=True, is_paid=True)
+            messages.success(self.request, 'Payment Done successfully')
+        # form.save()
+        return super().form_valid(form)
+
+    #     get form invalid method
+    def form_invalid(self, form):
+        print('form invalid   ', form.errors)
+        # error message
+        messages.error(self.request, 'Payment Failed')
+        return super().form_invalid(form)
 
 
 # User Register View
@@ -851,7 +894,7 @@ class UserRegisterView(FormView):
         email = form.cleaned_data['email']
         phone = form.cleaned_data['phone']
         address = form.cleaned_data['address']
-        plan_name = form.cleaned_data['plan']
+        plan_name = form.cleaned_data['plan_name']
         print("kk  ", plan_name)
         username = email
         context = self.get_context_data()
@@ -874,9 +917,10 @@ class UserRegisterView(FormView):
             gym_admin, _ = FitHubMember.objects.get_or_create(user=user_obj, gym_info=gym_info, phone=phone,
                                                               address=address, plan_name=plan_name)
             print("gym_admin ", gym_admin)
-            if gym_admin is not None:
-                GymMember.objects.get_or_create(user=user_obj, gym_info=gym_info, is_normal_member=True)
-            messages.success(self.request, "User Created successfully")
+
+            # if gym_admin is not None:
+            #     GymMember.objects.get_or_create(user=user_obj, gym_info=gym_info, is_normal_member=True)
+            # messages.success(self.request, "User Created successfully")
 
         return super().form_valid(form)
 
