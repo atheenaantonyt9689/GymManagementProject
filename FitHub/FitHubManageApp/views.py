@@ -993,3 +993,8 @@ class UserRegisterView(FormView):
 # def form_invalid(self, form):
 #     print("form is invalid", form.errors)
 #     return super().form_invalid(form)
+
+
+# Get ajax view for Ordering
+def gym_equipment_order_ajax_view():
+    pass

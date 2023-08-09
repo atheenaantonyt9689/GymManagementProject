@@ -186,3 +186,11 @@ class Blog(models.Model):
 
     def __str__(self):
         return "{}".format(self.title)
+
+class BuyEquipment(models.Model):
+    count = models.IntegerField(default=1)
+    user = models.ForeignKey('FitHubMember', on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now=True)
+    equipment = models.ForeignKey('Equipments', on_delete=models.CASCADE)
+    def __str__(self):
+        return "{}".format(self.name)

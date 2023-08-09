@@ -7,7 +7,7 @@ from FitHubManageApp.views import SuperAdminDashBoardView, AdministratorCreateVi
     AdminBlogListView, AdminBlogDeleteView, AdminBlogDetailView, AdminPaymentPlanCreateView, AdminPaymentPlanUpdateView, \
     AdminPaymentPlanDeleteView, AdminPaymentPlanListView, AdminEquipmentUpdateView, AdminEquipmentCreateView, \
     AdminEquipmentDeleteView, AdminEquipmentListView, AdminEquipmentDetailView, UserRegisterView, \
-    GymMembershipPaymentCreate, UserAdminDashBoardView
+    GymMembershipPaymentCreate, UserAdminDashBoardView, gym_equipment_order_ajax_view
 
 from django.urls import path
 
@@ -60,6 +60,7 @@ urlpatterns = [
     path('user/admin/equipment/delete/<int:pk>', AdminEquipmentDeleteView.as_view(), name='fithub_admin_equipment_delete'),
     path('user/admin/equipment/detail/<int:pk>', AdminEquipmentDetailView.as_view(), name='fithub_admin_equipment_detailview'),
     path('user/admin/equipment/list/', AdminEquipmentListView.as_view(), name='fithub_admin_equipment_list'),
+    path('user/user/equipment/order_ajax_view/', gym_equipment_order_ajax_view, name='fithub_order_placed_for_equipment_ajax'),
 
     # User Payment
     path('user/payment/', GymMembershipPaymentCreate.as_view(), name='fithub_user_payment'),

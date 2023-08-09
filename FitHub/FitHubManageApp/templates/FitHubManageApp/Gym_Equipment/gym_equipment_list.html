@@ -45,6 +45,7 @@
                     <td><a href="{% url 'fithub_admin_equipment_update' eqpmnt.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
                     <td><a href="{%  url 'fithub_admin_equipment_delete' eqpmnt.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
                 {% endif %}
+                  <td><a href="{%  url 'fithub_order_placed_for_equipment_ajax' %}" type="button" class="btn btn-block btn-primary">Buy</a></td>
 
                 </tr>
                 {% endfor %}
