@@ -1,0 +1,45 @@
+{% extends 'adminlte/base.html' %}
+{% block title %}FitHub{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Administrators List</h3>
+
+            <div class="card-tools">
+                <a href="{% url 'fithub_admin_create' gym_id %}" ><button  class="btn btn-primary">Add Admin
+
+                </button></a>
+                {% comment %}<div class="input-group input-group-sm" style="width: 150px;">
+
+                    <div class="input-group-append">
+
+                    </div>
+                </div>{% endcomment %}
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                <tr>
+                    <th>UserName</th>
+                    <th>Gym</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for gym_admin in gym_administrators %}
+                <tr>
+                    <td>{{ gym_admin.user.username }}</td>
+                    <td>{{ gym_admin.gym_info.name }}</td>
+                    <td><a href="{%  url 'fithub_admin_delete' gym_admin.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+{% endblock %}

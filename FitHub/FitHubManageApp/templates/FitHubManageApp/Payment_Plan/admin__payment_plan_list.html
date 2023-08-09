@@ -1,0 +1,55 @@
+{% extends 'adminlte/base.html' %}
+{% load user_tags %}
+{% block title %}Plqn List{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Plan List</h3>
+
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Duration</th>
+                    <th>Price</th>
+                    <th>Description</th>
+
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for plan in admin_payment_plan_list %}
+                <tr>
+                    <td>{{ plan.name}}</td>
+                    <td>{{plan.duration }}</td>
+                    <td>{{ plan.price}}</td>
+                    <td>{{plan.description }}</td>
+
+                     {% if request.user|is_trainer or request.user|is_administrator %}
+                    <td><a href="{% url 'fithub_admin_payment_plan_update' plan.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
+                    <td><a href="{%  url 'fithub_admin_payment_plan_delete' plan.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+{% endblock %}

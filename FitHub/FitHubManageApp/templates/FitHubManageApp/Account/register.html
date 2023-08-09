@@ -1,0 +1,153 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FitHub | Login</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'admin-lte/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{% static 'admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'admin-lte/dist/css/adminlte.min.css' %}">
+    <style>
+        .errorlist {
+            color: red;
+        }
+
+        .register_hub {
+            background-image: url('https://img.freepik.com/free-photo/low-angle-view-unrecognizable-muscular-build-man-preparing-lifting-barbell-health-club_637285-2497.jpg?w=740&t=st=1691552524~exp=1691553124~hmac=f57fe5530001750a82e140207e5e86ff35f358a5b1a5684162a6aae942b1317f');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center; /* Adjust as needed */
+            background-attachment: fixed; /* Optional: prevents scrolling */
+        }
+    </style>
+    {{ form.media.css }}
+</head>
+<body class="hold-transition login-page register_hub">
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#" style="color: white"><b>FitHub</b></a>
+    </div>
+    <!-- /.login-logo -->
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg">Register To Fithub</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                {#                  <p style="color: #dc0032;">{{ error }}</p>#}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="First Name" name="first_name"
+                           id="id_first_name">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Last Name" name="last_name" id="id_last_name">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+                <p>{{ form.email.errors }}</p>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Email" name="email" id="id_email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <p>{{ form.password.errors }}</p>
+                <div class="input-group mb-3">
+
+                    <input type="password" class="form-control" placeholder="Password" name="password" id="id_password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Confirm Password" name="confirm_password"
+                           id="id_confirm_password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_plan_name">Choose Your Plan</label>
+                    <select class="form-control rounded-0" id="id_plan_name" name="plan_name">
+                        <option value="Basic Plan">Basic</option>
+                        <option value="Premium Plan">Premium</option>
+                    </select>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Address" name="address" id="id_address">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-home"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Mobile" name="phone" id="id_phone">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-phone"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <a href="{% url 'fithub_login_view' %}"  {% comment %}class="btn btn-primary btn-block"{% endcomment %}>Sign
+                            In</a>
+                    </div>
+                    <div class="col-4">
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">REGISTER</button>
+                    </div>
+
+
+                    <!-- /.col -->
+                    <!-- /.col -->
+                </div>
+            </form>
+
+            {% comment %}<p class="mb-1">
+        <a href="#">I forgot my password</a>
+      </p>
+      <p class="mb-0">
+        <a href="#" class="text-center">Register a new membership</a>
+      </p>{% endcomment %}
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery -->
+<script src="{% static 'admin-lte/plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'admin-lte/dist/js/adminlte.min.js' %}"></script>
+</body>
+</html>

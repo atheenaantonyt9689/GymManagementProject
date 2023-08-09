@@ -1,0 +1,24 @@
+{% extends 'adminlte/base.html' %}
+{% block title %}FitHub{% endblock %}
+{% block content %}
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Plan Delete</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="card-body">
+                <p>Are you sure you want to delete "{{ object }}" ?</p>
+
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

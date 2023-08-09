@@ -1,0 +1,35 @@
+{% extends 'adminlte/base.html' %}
+{% block title %}Trainer Update{% endblock %}
+{% block content %}
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Trainer Update</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="post" action="">
+            {% csrf_token %}
+            {#            {{ form.as_p }}#}
+            <div class="card-body">
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field }}
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+

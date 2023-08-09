@@ -1,0 +1,6 @@
+*.pyc
+__pycache__/
+.idea
+.coverage
+venv/
+db.sqlite3

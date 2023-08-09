@@ -1,0 +1,59 @@
+{% extends 'adminlte/base.html' %}
+{% block title %}Equipment List{% endblock %}
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Equipment List</h3>
+
+            <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Count</th>
+                    <th>Price</th>
+                    <th>Available</th>
+
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for eqpmnt in admin_equipment_list %}
+                <tr>
+                    <td>{{ eqpmnt.name}}</td>
+                    <td>{{eqpmnt.count }}</td>
+                    <td>{{ eqpmnt.price}}</td>
+                    {% comment %}<td>{{eqpmnt.description }}</td>{% endcomment %}
+                    <td>{{eqpmnt.is_available }}</td>
+
+
+                    <td><a href="{% url 'fithub_admin_equipment_detailview' eqpmnt.id %}" type="button" class="btn btn-block btn-primary">Details</a></td>
+                    {% if request.user.is_trainer or request.user.is_administrator %}
+                    <td><a href="{% url 'fithub_admin_equipment_update' eqpmnt.id %}" type="button" class="btn btn-block btn-primary"><i class="fas fa-edit"></i>Update</a></td>
+                    <td><a href="{%  url 'fithub_admin_equipment_delete' eqpmnt.id %}" type="button" class="btn btn-block btn-danger"><i class="fas fa-trash"></i>Delete</a></td>
+                {% endif %}
+                  <td><a href="{%  url 'fithub_order_placed_for_equipment_ajax' %}" type="button" class="btn btn-block btn-primary">Buy</a></td>
+
+                </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+
+{% endblock %}
